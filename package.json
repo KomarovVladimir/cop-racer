@@ -1,0 +1,11 @@
+{
+  "name": "cop-racer",
+  "version": "0.0.1",
+  "description": "a silly js game",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Vladimir Komarov <komarov2142@gmail.com>",
+  "license": "MIT"
+}
