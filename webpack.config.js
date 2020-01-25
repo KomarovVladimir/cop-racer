@@ -1,42 +1,62 @@
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const webpack = require('webpack');
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = {
-    "mode": "production",
-    "entry": "src/index.js",
-    "output": {
-        "path": __dirname+'/dist',
-        "filename": "[name].js"
-    },
-    "devtool": "source-map",
-    "module": {
-        "rules": [
-            {
-                "enforce": "pre",
-                "test": /\.(js|jsx)$/,
-                "exclude": /node_modules/,
-                "use": "eslint-loader"
-            },
-            {
-                "test": /\.js$/,
-                "exclude": /node_modules/,
-                "use": {
-                    "loader": "babel-loader",
-                    "options": {
-                        "presets": [
-                            "env"
-                        ]
-                    }
-                }
-            },
-            {
-                "test": /\.scss$/,
-                "use": [
-                    MiniCssExtractPlugin.loader,
-                    "css-loader",
-                    "sass-loader"
-                ]
+const config = {
+  entry: './src/index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        use: 'babel-loader',
+        exclude: /node_modules/
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1
             }
+          },
+          'postcss-loader'
         ]
-    },
-    "plugins": [new MiniCssExtractPlugin({filename: "[name]-[contenthash:8].css"})]
-}
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          'sass-loader'
+        ]
+      }
+    ]
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+        template: require('html-webpack-template'),
+        inject: false,
+        appMountId: 'app',
+      })
+  ],
+  optimization: {
+    runtimeChunk: 'single',
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all'
+        }
+      }
+    }
+  }
+};
+
+module.exports = config;
