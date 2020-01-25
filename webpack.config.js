@@ -1,6 +1,6 @@
-const webpack = require("webpack");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyPlugin = require('copy-webpack-plugin');
 
 const config = {
   entry: "./src/index.js",
@@ -40,9 +40,12 @@ const config = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-        title: "CopRacer",
-        template: "./src/templates/index.html",
-      })
+      title: "CopRacer",
+      template: "./src/templates/index.html",
+    }),
+    new CopyPlugin([
+      { from: "./src/images", to: "images" },
+    ]),
   ],
   optimization: {
     runtimeChunk: "single",

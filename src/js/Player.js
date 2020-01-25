@@ -1,5 +1,4 @@
-import keyStates from './keyStates';
-import Ship from './Ship';
+import keyStates from "./keyStates";
 
 export default class Player extends Ship {
     constructor(props) {
@@ -29,11 +28,11 @@ export default class Player extends Ship {
         super.turn(direction);
 
         switch (direction) {
-            case 'right': {
+            case "right": {
                 this.currentTileRow = 2;
                 break;
             }
-            case 'left': {
+            case "left": {
                 this.currentTileRow = 1; 
                 break;
             }

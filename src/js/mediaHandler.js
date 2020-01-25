@@ -1,8 +1,8 @@
-import gameMedia from './gameMedia';
+import gameMedia from "./gameMedia";
 
 export default class MediaHandler {
-    constructor(props) {
-        this.imageSources = (props && props.imageSources.slice()) || [];
+    constructor(imageSources) {
+        this.imageSources = imageSources || [];
     }
 
     setImageSources(sourcesArray) {
@@ -10,7 +10,7 @@ export default class MediaHandler {
     }
 
     getImageSources() {
-        return  this.imageSources;
+        return this.imageSources;
     }
 
     addImage(image, src) {

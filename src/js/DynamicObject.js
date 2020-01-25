@@ -1,4 +1,4 @@
-import Object from './Object';
+import Object from "./Object";
 
 export default class DynamicObject extends Object {
     constructor(props) {
@@ -19,7 +19,7 @@ export default class DynamicObject extends Object {
 
     turn(direction) {
         switch (direction) {
-            case 'right': {
+            case "right": {
                 this.angle -= this.turnSpeed;
                 if ( this.angle <= 0 ) {
                     this.angle = 360 - this.angle;
@@ -27,7 +27,7 @@ export default class DynamicObject extends Object {
                 this.radAngle = this.angle * Math.PI / 180;
                 break;
             }
-            case 'left': {
+            case "left": {
                 this.angle += this.turnSpeed;
                 if ( this.angle >= 360 ) {
                     this.angle = this.angle - 360;
