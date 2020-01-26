@@ -1,4 +1,5 @@
 import MediaHandler from "./MediaHandler";
+import Scene from "./Scene";
 const mediaHandler = new MediaHandler();
 
 const gameStates = {
@@ -27,9 +28,10 @@ export default class Game {
 
     async start() {
         await this.init();
-
         this.gameState = gameStates.gameOn;
-        console.log(this.gameState);
+        console.log(Scene);
+        // Scene.init();
+        // Scene.render();
     }  
 }
 
