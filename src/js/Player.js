@@ -10,6 +10,7 @@ export default class Player {
         this.currentTile = props.currentTile || 0;
         this.posX = props.posX || 0;
         this.posY = props.posY || 0;
+        this
     }
 
     update(dt) {
@@ -19,7 +20,7 @@ export default class Player {
 
     draw(ctx) {
         ctx.save();
-        ctx.translate(this.positionX  + this.tileWidth / 2, this.positionY + this.tileHeight / 2);
+        ctx.translate(this.posX  + this.tileWidth / 2, this.posY + this.tileHeight / 2);
         ctx.rotate(-(this.angle - 90) * Math.PI / 180);
         ctx.drawImage(
             this.image, 
