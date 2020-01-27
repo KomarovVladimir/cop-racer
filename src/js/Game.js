@@ -16,6 +16,8 @@ const imageSources = [
 export default class Game {
     constructor(ctx) {
         this.ctx = ctx;
+
+        this.scene = new Scene();
     }
 
     async init() {
@@ -29,9 +31,8 @@ export default class Game {
     async start() {
         await this.init();
         this.gameState = gameStates.gameOn;
-        console.log(Scene);
-        // Scene.init();
-        // Scene.render();
+        this.scene.init();
+        this.scene.render(this.ctx);
     }  
 }
 

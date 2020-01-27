@@ -1,6 +1,6 @@
 import gameObjects from './gameObjects';
 
-export default class ObjectHandler {
+class ObjectHandler {
     createObject(Class, props) {
         let obj = new Class(props);
         this.addObject(obj);
@@ -23,3 +23,5 @@ export default class ObjectHandler {
         gameObjects.splice(gameObjects.indexOf(obj), 1);
     }
 }
+
+export default new ObjectHandler();

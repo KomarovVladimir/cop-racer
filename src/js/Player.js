@@ -16,4 +16,22 @@ export default class Player {
         if(keyStates.space) {
         }
     }
+
+    draw(ctx) {
+        ctx.save();
+        ctx.translate(this.positionX  + this.tileWidth / 2, this.positionY + this.tileHeight / 2);
+        ctx.rotate(-(this.angle - 90) * Math.PI / 180);
+        ctx.drawImage(
+            this.image, 
+            this.currentTile * this.tileWidth,  
+            this.currentTileRow * this.tileHeight, 
+            this.tileWidth,
+            this.tileHeight, 
+            -this.tileWidth / 2, 
+            -this.tileHeight / 2, 
+            this.tileWidth, 
+            this.tileHeight
+        );
+        ctx.restore();
+    }
 }
