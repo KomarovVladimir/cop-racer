@@ -7,6 +7,7 @@ import Obstacle from "./Obstacle";
 
 export default class Scene {
     constructor(props) {
+        this.ctx = props.ctx;
         this.requestId = null;
         this.fps = 60;
         this.tps = 12;
@@ -42,7 +43,7 @@ export default class Scene {
 
     update(dt) {
         this.keyHandler(dt);
-        for (let obj of this.objects) {
+        for (let obj of gameObjects) {
             if (obj.update) {
                 obj.update(dt);
             }
@@ -64,19 +65,19 @@ export default class Scene {
         }
     }
 
-    render(ctx) {
-        this.drawBackground(ctx);
+    render() {
+        this.drawBackground();
         for (let obj of gameObjects) {
-            obj.draw(ctx);
+            obj.draw(this.ctx);
         }
     }
 
-    drawBackground(ctx) {
-        let gradient = ctx.createLinearGradient(0, 120, 0, 0);
+    drawBackground() {
+        let gradient = this.ctx.createLinearGradient(0, 120, 0, 0);
         gradient.addColorStop(0, "rgb(125, 100, 190)");
         gradient.addColorStop(1, "rgb(155, 60, 160, 160)");
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, 640, 240);
+        this.ctx.fillStyle = gradient;
+        this.ctx.fillRect(0, 0, 640, 240);
     }
 
     frame() {
@@ -86,7 +87,7 @@ export default class Scene {
             this.requestId = requestAnimationFrame(this.frame);
         } else {
             this.update(dt);
-            this.refreshTiles(this.objects);
+            // this.refreshTiles(gameObjects);
             
             this.render();
             

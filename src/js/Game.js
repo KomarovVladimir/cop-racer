@@ -17,7 +17,7 @@ export default class Game {
     constructor(ctx) {
         this.ctx = ctx;
 
-        this.scene = new Scene();
+        this.scene = new Scene({ctx: this.ctx});
     }
 
     async init() {
@@ -31,8 +31,7 @@ export default class Game {
     async start() {
         await this.init();
         this.gameState = gameStates.gameOn;
-        this.scene.init();
-        this.scene.render(this.ctx);
+        this.scene.start();
     }  
 }
 

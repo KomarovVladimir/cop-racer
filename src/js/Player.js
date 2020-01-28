@@ -10,11 +10,22 @@ export default class Player {
         this.currentTile = props.currentTile || 0;
         this.posX = props.posX || 0;
         this.posY = props.posY || 0;
-        this
+        this.upForce = 15;
+        this.downForce = 5 ;
+        this.jumped = false;
     }
 
     update(dt) {
-        if(keyStates.space) {
+        if(keyStates.space && !this.jumped) {
+            this.jumped == true;
+            this.upForce = 10;
+            this.posY -= this.upForce;
+        } else {
+            if (this.posY < 176) {
+                this.posY += this.downForce;
+            } else {
+                this.posY = 176;
+            }
         }
     }
 
