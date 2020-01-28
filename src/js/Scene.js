@@ -1,9 +1,9 @@
 import keyStates from "./keyStates";
 import gameMedia from "./gameMedia";
-import gameObjects from "./gameObjects.js";
-import objectHandler from "./objectHandler";
 import Player from "./Player";
 import Obstacle from "./Obstacle";
+
+let gameObjects = [];
 
 export default class Scene {
     constructor(props) {
@@ -24,7 +24,7 @@ export default class Scene {
     }
 
     init() {
-        this.player = objectHandler.createObject(Player, {
+        this.player = this.createObject(Player, {
             image: gameMedia.player,
             tileHeight: 32,
             tileWidth: 48,
@@ -96,6 +96,7 @@ export default class Scene {
                 this.lastObstacle = currentTime;
                 this.obstacleDelay = 1000 + Math.floor(Math.random() * 1000);
                 this.createObstacle();
+                this.clearObstacles();
             }
 
             this.update(dt);
@@ -108,13 +109,26 @@ export default class Scene {
         }
     }
 
+    createObject(Class, props) {
+        let obj = new Class(props);
+        gameObjects.push(obj);
+    }
+
     createObstacle() {
-        objectHandler.createObject(Obstacle, {
+        this.createObject(Obstacle, {
             image: gameMedia.obstacle,
             tileHeight: 32,
             tileWidth: 16,
             posX: 640,
             posY: 176
         });
+    }
+
+    checkCollisions() {
+    }
+
+    clearObstacles() {
+        const filteredObjects = gameObjects.filter(obj => obj.posX > 0);
+        gameObjects = [...filteredObjects];
     }
 }
