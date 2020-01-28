@@ -15,6 +15,10 @@ export default class Scene {
         this.lastTileTime = null;
         this.frameDelay = Math.floor(1000 / this.fps);
         this.tileDelay =  Math.floor(1000 / this.tps);
+        this.gameStartTime = null;
+
+        this.obstacleDelay = 1000;
+        this.lastObstacle = 0;
 
         this.frame = this.frame.bind(this);
     }
@@ -38,11 +42,12 @@ export default class Scene {
 
     startSceneLoop() {
         this.last = this.lastTileTime = performance.now();
+        this.gameStartTime = performance.now();
         this.requestId = requestAnimationFrame(this.frame);
     }
 
     update(dt) {
-        this.keyHandler(dt);
+        // this.keyHandler(dt);
         for (let obj of gameObjects) {
             if (obj.update) {
                 obj.update(dt);
@@ -81,11 +86,18 @@ export default class Scene {
     }
 
     frame() {
-        let dt = ~~(performance.now() - this.lastTime);
+        const currentTime = performance.now();
+        let dt = ~~(currentTime - this.lastTime);
         
         if (dt < this.frameDelay) {
             this.requestId = requestAnimationFrame(this.frame);
         } else {
+            if (currentTime - this.lastObstacle >= this.obstacleDelay) {
+                this.lastObstacle = currentTime;
+                this.obstacleDelay = 1000 + Math.floor(Math.random() * 1000);
+                this.createObstacle();
+            }
+
             this.update(dt);
             // this.refreshTiles(gameObjects);
             
@@ -94,5 +106,15 @@ export default class Scene {
             this.lastTime = performance.now();
             this.requestId = requestAnimationFrame(this.frame);
         }
+    }
+
+    createObstacle() {
+        objectHandler.createObject(Obstacle, {
+            image: gameMedia.obstacle,
+            tileHeight: 32,
+            tileWidth: 16,
+            posX: 640,
+            posY: 176
+        });
     }
 }

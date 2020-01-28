@@ -1,3 +1,5 @@
+import keyStates from "./keyStates";
+
 export default class Object {
     constructor(props) {
         this.image = props.image || null;
@@ -8,20 +10,9 @@ export default class Object {
         this.currentTile = props.currentTile || 0;
         this.posX = props.posX || 0;
         this.posY = props.posY || 0;
-        this
-    }
-
-    nextTile() {
-        if (this.currentTile < (this.tilesAmount - 1)) {
-            this.currentTile++;
-        } else {
-            this.currentTile = 0;
-        }
     }
 
     update(dt) {
-        if(keyStates.space) {
-        }
     }
 
     draw(ctx) {
