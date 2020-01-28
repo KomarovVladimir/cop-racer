@@ -11,20 +11,21 @@ export default class Player {
         this.posX = props.posX || 0;
         this.posY = props.posY || 0;
         this.upForce = 15;
-        this.downForce = 5 ;
+        this.downForce = 4;
         this.jumped = false;
     }
 
     update(dt) {
         if(keyStates.space && !this.jumped) {
-            this.jumped == true;
-            this.upForce = 10;
+            this.jumped = true;
+            this.upForce = 32;
             this.posY -= this.upForce;
-        } else {
-            if (this.posY < 176) {
-                this.posY += this.downForce;
-            } else {
+        } else if(this.jumped) {
+            this.upForce -= this.downForce;
+            this.posY -= this.upForce;
+            if (this.posY > 176) {
                 this.posY = 176;
+                this.jumped = false;
             }
         }
     }
