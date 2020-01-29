@@ -2,6 +2,7 @@ import keyStates from "./keyStates";
 
 export default class Object {
     constructor(props) {
+        this.type = "";
         this.image = props.image || null;
         this.tilesAmount = props.tilesAmount || 0;
         this.tileWidth = props.tileWidth || 0;

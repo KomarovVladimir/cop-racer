@@ -11,6 +11,8 @@ const sceneStates = {
     pending: "PENDING"
 }
 
+const score = document.getElementById("score");
+
 export default class Scene {
     constructor(props) {
         this.ctx = props.ctx;
@@ -23,6 +25,9 @@ export default class Scene {
         this.tileDelay =  Math.floor(1000 / this.tps);
         this.sceneStartTime = null;
         this.sceneState = sceneStates.pending;
+        this.score = 0;
+        this.scoreDelay = 60;
+        this.lastScore = null;
 
         this.obstacleDelay = 800;
         this.lastObstacle = 0;
@@ -104,15 +109,21 @@ export default class Scene {
                     this.render();
                     if (keyStates.space) {
                         this.sceneState = sceneStates.on;
-                        this.obstacleDelay += 3000;
+                        this.obstacleDelay += 2000;
+                        this.sceneStartTime = currentTime;
                     }
                     break;
                 case "ON":
-                    if (currentTime - this.lastObstacle >= this.obstacleDelay) {
+                    if ( currentTime - this.sceneStartTime - this.lastObstacle >= this.obstacleDelay) {
                         this.lastObstacle = currentTime;
-                        this.obstacleDelay = 1000 + Math.floor(Math.random() * 1000);
+                        this.obstacleDelay = 500 + Math.floor(Math.random() * 100);
                         this.createObstacle();
                         this.clearObstacles();
+                    }
+                    if (currentTime - this.lastScore >= this.scoreDelay) {
+                        this.lastScore = currentTime;
+                        this.score++;
+                        score.textContent = this.score;
                     }
         
                     this.update(dt);
@@ -137,6 +148,7 @@ export default class Scene {
 
     createObstacle() {
         const obstacle = this.createObject(Obstacle, {
+            type: "OBSTACLE",
             image: gameMedia.obstacle,
             tileHeight: 32,
             tileWidth: 16,
@@ -146,7 +158,11 @@ export default class Scene {
     }
 
     checkCollisions() {
+        for (let obj of gameObjects) {
+            if (obj.type === "OBSTACLE") {
 
+            }
+        }
     }
 
     clearObstacles() {
