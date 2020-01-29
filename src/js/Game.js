@@ -2,10 +2,6 @@ import MediaHandler from "./MediaHandler";
 import Scene from "./Scene";
 const mediaHandler = new MediaHandler();
 
-const gameStates = {
-    gameOn: "GAME_ON"
-}
-
 const imageSources = [
     "./images/player.png",
     "./images/road.png",
@@ -16,7 +12,6 @@ const imageSources = [
 export default class Game {
     constructor(ctx) {
         this.ctx = ctx;
-
         this.scene = new Scene({ctx: this.ctx});
     }
 
@@ -30,7 +25,6 @@ export default class Game {
 
     async start() {
         await this.init();
-        this.gameState = gameStates.gameOn;
         this.scene.start();
     }  
 }

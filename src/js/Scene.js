@@ -5,6 +5,12 @@ import Obstacle from "./Obstacle";
 
 let gameObjects = [];
 
+const sceneStates = {
+    on: "ON",
+    lose: "LOSE",
+    pending: "PENDING"
+}
+
 export default class Scene {
     constructor(props) {
         this.ctx = props.ctx;
@@ -15,9 +21,10 @@ export default class Scene {
         this.lastTileTime = null;
         this.frameDelay = Math.floor(1000 / this.fps);
         this.tileDelay =  Math.floor(1000 / this.tps);
-        this.gameStartTime = null;
+        this.sceneStartTime = null;
+        this.sceneState = sceneStates.pending;
 
-        this.obstacleDelay = 1000;
+        this.obstacleDelay = 800;
         this.lastObstacle = 0;
 
         this.frame = this.frame.bind(this);
@@ -35,14 +42,14 @@ export default class Scene {
 
     async start() {
         await this.init();
-        console.log('Game started.')
-
+        this.sceneState = sceneStates.pending;
         this.startSceneLoop();
+        console.log('Scene started.');
     }
 
     startSceneLoop() {
         this.last = this.lastTileTime = performance.now();
-        this.gameStartTime = performance.now();
+        this.sceneStartTime = performance.now();
         this.requestId = requestAnimationFrame(this.frame);
     }
 
@@ -92,17 +99,31 @@ export default class Scene {
         if (dt < this.frameDelay) {
             this.requestId = requestAnimationFrame(this.frame);
         } else {
-            if (currentTime - this.lastObstacle >= this.obstacleDelay) {
-                this.lastObstacle = currentTime;
-                this.obstacleDelay = 1000 + Math.floor(Math.random() * 1000);
-                this.createObstacle();
-                this.clearObstacles();
+            switch (this.sceneState) {
+                case "PENDING": 
+                    this.render();
+                    if (keyStates.space) {
+                        this.sceneState = sceneStates.on;
+                        this.obstacleDelay += 3000;
+                    }
+                    break;
+                case "ON":
+                    if (currentTime - this.lastObstacle >= this.obstacleDelay) {
+                        this.lastObstacle = currentTime;
+                        this.obstacleDelay = 1000 + Math.floor(Math.random() * 1000);
+                        this.createObstacle();
+                        this.clearObstacles();
+                    }
+        
+                    this.update(dt);
+                    // this.refreshTiles(gameObjects);
+                    
+                    this.render();
+                    break;
+                case "LOSE": 
+                    console.log("You lose.");
+                    break;
             }
-
-            this.update(dt);
-            // this.refreshTiles(gameObjects);
-            
-            this.render();
             
             this.lastTime = performance.now();
             this.requestId = requestAnimationFrame(this.frame);
@@ -115,7 +136,7 @@ export default class Scene {
     }
 
     createObstacle() {
-        this.createObject(Obstacle, {
+        const obstacle = this.createObject(Obstacle, {
             image: gameMedia.obstacle,
             tileHeight: 32,
             tileWidth: 16,
@@ -125,10 +146,11 @@ export default class Scene {
     }
 
     checkCollisions() {
+
     }
 
     clearObstacles() {
-        const filteredObjects = gameObjects.filter(obj => obj.posX > 0);
+        const filteredObjects = gameObjects.filter(obj => obj.posX > -obj.tileWidth);
         gameObjects = [...filteredObjects];
     }
 }
