@@ -110,13 +110,13 @@ export default class Scene {
                     if (keyStates.space) {
                         this.sceneState = sceneStates.on;
                         this.obstacleDelay += 2000;
-                        this.sceneStartTime = currentTime;
+                        this.lastObstacle = currentTime;
                     }
                     break;
                 case "ON":
-                    if ( currentTime - this.sceneStartTime - this.lastObstacle >= this.obstacleDelay) {
+                    if ( currentTime - this.lastObstacle >= this.obstacleDelay) {
                         this.lastObstacle = currentTime;
-                        this.obstacleDelay = 500 + Math.floor(Math.random() * 100);
+                        this.obstacleDelay = 600 + Math.floor(Math.random() * 400 + 200);
                         this.createObstacle();
                         this.clearObstacles();
                     }
