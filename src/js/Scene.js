@@ -132,9 +132,9 @@ export default class Scene {
                     this.render();
                     break;
                 case "LOSE": 
-                    console.log(`You lose. Score: ${this.score}`);
-                    cancelAnimationFrame(this.requestId);
-                    this.restart();
+                    if (keyStates.space) {
+                        this.restart();
+                    }
                     break;
             }
             
@@ -180,6 +180,7 @@ export default class Scene {
     restart() {
         gameObjects = [];
         this.init();
+        this.score = 0;
         this.sceneState = sceneStates.pending;
     }
 }
