@@ -10,6 +10,8 @@ export default class Player extends Object {
     }
 
     update(dt) {
+        super.update(dt);
+
         if(keyStates.space && !this.jumped) {
             this.jumped = true;
             this.upForce = 20;

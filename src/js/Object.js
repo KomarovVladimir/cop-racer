@@ -2,7 +2,7 @@ import keyStates from "./keyStates";
 
 export default class Object {
     constructor(props) {
-        this.type = "";
+        this.type = props.type || "";
         this.image = props.image || null;
         this.tilesAmount = props.tilesAmount || 0;
         this.tileWidth = props.tileWidth || 0;
@@ -11,9 +11,13 @@ export default class Object {
         this.currentTile = props.currentTile || 0;
         this.posX = props.posX || 0;
         this.posY = props.posY || 0;
+        this.rightBorder = this.posX + this.tileWidth;
+        this.bottomBorder = this.posY + this.tileHeight;
     }
 
     update(dt) {
+        this.rightBorder = this.posX + this.tileWidth;
+        this.bottomBorder = this.posY + this.tileHeight;
     }
 
     draw(ctx) {

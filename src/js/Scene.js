@@ -28,7 +28,6 @@ export default class Scene {
         this.score = 0;
         this.scoreDelay = 60;
         this.lastScore = null;
-
         this.obstacleDelay = 800;
         this.lastObstacle = 0;
 
@@ -120,6 +119,7 @@ export default class Scene {
                         this.createObstacle();
                         this.clearObstacles();
                     }
+                    this.checkCollisions();
                     if (currentTime - this.lastScore >= this.scoreDelay) {
                         this.lastScore = currentTime;
                         this.score++;
@@ -132,7 +132,9 @@ export default class Scene {
                     this.render();
                     break;
                 case "LOSE": 
-                    console.log("You lose.");
+                    console.log(`You lose. Score: ${this.score}`);
+                    cancelAnimationFrame(this.requestId);
+                    this.restart();
                     break;
             }
             
@@ -144,10 +146,11 @@ export default class Scene {
     createObject(Class, props) {
         let obj = new Class(props);
         gameObjects.push(obj);
+        return obj;
     }
 
     createObstacle() {
-        const obstacle = this.createObject(Obstacle, {
+        this.createObject(Obstacle, {
             type: "OBSTACLE",
             image: gameMedia.obstacle,
             tileHeight: 32,
@@ -160,7 +163,11 @@ export default class Scene {
     checkCollisions() {
         for (let obj of gameObjects) {
             if (obj.type === "OBSTACLE") {
-
+                if (
+                    this.player.rightBorder >= obj.posX && this.player.posX <= obj.rightBorder && this.player.bottomBorder >= obj.posY
+                ) { 
+                    this.sceneState = sceneStates.lose;
+                }
             }
         }
     }
@@ -168,5 +175,11 @@ export default class Scene {
     clearObstacles() {
         const filteredObjects = gameObjects.filter(obj => obj.posX > -obj.tileWidth);
         gameObjects = [...filteredObjects];
+    }
+
+    restart() {
+        gameObjects = [];
+        this.init();
+        this.sceneState = sceneStates.pending;
     }
 }
