@@ -7,6 +7,7 @@ export default class Obstacle extends Object {
     }
 
     update(dt) {
+        super.update(dt);
         this.posX -= this.speed;
     }
 }
