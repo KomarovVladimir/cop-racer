@@ -1,6 +1,5 @@
 import keyStates from "./keyStates";
 import gameMedia from "./gameMedia";
-import Object from "./Object";
 import Player from "./Player";
 import Obstacle from "./Obstacle";
 
@@ -12,6 +11,8 @@ const sceneStates = {
     pending: "PENDING"
 }
 
+const obstacleSpeed = 12;
+
 const score = document.getElementById("score");
 const topScore = document.getElementById("top-score");
 
@@ -19,7 +20,7 @@ export default class Scene {
     constructor(props) {
         this.ctx = props.ctx;
         this.requestId = null;
-        this.fps = 60;
+        this.fps = 120;
         this.tps = 12;
         this.lastTime = null;
         this.lastTileTime = null;
@@ -109,7 +110,7 @@ export default class Scene {
     frame() {
         const currentTime = performance.now();
         let dt = ~~(currentTime - this.lastTime);
-        
+
         if (dt < this.frameDelay) {
             this.requestId = requestAnimationFrame(this.frame);
         } else {
@@ -173,8 +174,9 @@ export default class Scene {
             this.createObject(Obstacle, {
                 type: "OBSTACLE",
                 image: gameMedia.bigObstacle,
+                speed: obstacleSpeed,
                 tileHeight: 32,
-                tileWidth: 64,
+                tileWidth: 90,
                 posX: 640,
                 posY: 168
             });
@@ -182,6 +184,7 @@ export default class Scene {
             this.createObject(Obstacle, {
                 type: "OBSTACLE",
                 image: gameMedia.mediumObstacle,
+                speed: obstacleSpeed,
                 tileHeight: 32,
                 tileWidth: 32,
                 posX: 640,
@@ -191,6 +194,7 @@ export default class Scene {
             this.createObject(Obstacle, {
                 type: "OBSTACLE",
                 image: gameMedia.mediumObstacle,
+                speed: obstacleSpeed,
                 tileHeight: 32,
                 tileWidth: 32,
                 posX: 640,
@@ -200,6 +204,7 @@ export default class Scene {
             this.createObject(Obstacle, {
                 type: "OBSTACLE",
                 image: gameMedia.mediumObstacle,
+                speed: obstacleSpeed,
                 tileHeight: 32,
                 tileWidth: 32,
                 posX: 640,
@@ -209,10 +214,11 @@ export default class Scene {
             this.createObject(Obstacle, {
                 type: "OBSTACLE",
                 image: gameMedia.smallObstacle,
-                tileHeight: 32,
-                tileWidth: 16,
+                speed: obstacleSpeed,
+                tileHeight: 44,
+                tileWidth: 28,
                 posX: 640,
-                posY: 168
+                posY: 156
             });
         }
     }
@@ -222,8 +228,8 @@ export default class Scene {
             if (obj.type === "OBSTACLE") {
                 if (
                     this.player.rightBorder >= obj.posX &&
-                    this.player.posX <= obj.rightBorder && 
-                    this.player.bottomBorder >= obj.posY && 
+                    this.player.posX + 12 <= obj.rightBorder && 
+                    this.player.bottomBorder - this.player.upForce >= obj.posY && 
                     this.player.posY <= obj.bottomBorder
                 ) { 
                     return true;
