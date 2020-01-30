@@ -221,7 +221,10 @@ export default class Scene {
         for (let obj of gameObjects) {
             if (obj.type === "OBSTACLE") {
                 if (
-                    this.player.rightBorder >= obj.posX && this.player.posX <= obj.rightBorder && this.player.bottomBorder >= obj.posY && this.player.posY <= obj.bottomBorder
+                    this.player.rightBorder >= obj.posX &&
+                    this.player.posX <= obj.rightBorder && 
+                    this.player.bottomBorder >= obj.posY && 
+                    this.player.posY <= obj.bottomBorder
                 ) { 
                     return true;
                 }

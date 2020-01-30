@@ -5,7 +5,7 @@ export default class Player extends Object {
     constructor(props) {
         super(props);
         this.upForce = 0;
-        this.downForce = 1.5;
+        this.downForce = 1;
         this.jumped = false;
     }
 
@@ -14,7 +14,7 @@ export default class Player extends Object {
 
         if(keyStates.space && !this.jumped) {
             this.jumped = true;
-            this.upForce = 20;
+            this.upForce = 16;
             this.posY -= this.upForce;
         } else if(this.jumped) {
             this.upForce -= this.downForce;
@@ -26,3 +26,18 @@ export default class Player extends Object {
         }
     }
 }
+
+//flappy bird version lol
+
+// if(keyStates.space) {
+//     this.jumped = true;
+//     this.upForce = 8;
+//     this.posY -= this.upForce;
+// } else {
+//     this.upForce -= this.downForce;
+//     this.posY -= this.upForce;
+//     if (this.posY > this.baseY) {
+//         this.posY = this.baseY;
+//         this.jumped = false;
+//     }
+// }
