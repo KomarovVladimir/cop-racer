@@ -12,6 +12,8 @@ const sceneStates = {
 }
 
 const score = document.getElementById("score");
+const topScore = document.getElementById("top-score");
+
 
 export default class Scene {
     constructor(props) {
@@ -21,7 +23,7 @@ export default class Scene {
         this.tps = 12;
         this.lastTime = null;
         this.lastTileTime = null;
-        this.frameDelay = Math.floor(1000 / this.fps);
+        this.frameDelay = Math.floor(1000 / this.fps); 
         this.tileDelay =  Math.floor(1000 / this.tps);
         this.sceneStartTime = null;
         this.sceneState = sceneStates.pending;
@@ -30,11 +32,18 @@ export default class Scene {
         this.lastScore = null;
         this.obstacleDelay = 800;
         this.lastObstacle = 0;
+        this.loseTime = null;
+        this.restartDelay = 1000;
+        this.topScore = 0;
 
         this.frame = this.frame.bind(this);
     }
 
     init() {
+        gameObjects = [];
+        this.score = 0;
+        this.sceneState = sceneStates.pending;
+
         this.player = this.createObject(Player, {
             image: gameMedia.player,
             tileHeight: 32,
@@ -113,27 +122,35 @@ export default class Scene {
                     }
                     break;
                 case "ON":
-                    if ( currentTime - this.lastObstacle >= this.obstacleDelay) {
-                        this.lastObstacle = currentTime;
-                        this.obstacleDelay = 600 + Math.floor(Math.random() * 400 + 200);
-                        this.createObstacle();
-                        this.clearObstacles();
+                    if (!this.checkCollisions()) {
+                        if ( currentTime - this.lastObstacle >= this.obstacleDelay) {
+                            this.lastObstacle = currentTime;
+                            this.obstacleDelay = 600 + Math.floor(Math.random() * 400 + 200);
+                            this.createObstacle();
+                            this.clearObstacles();
+                        }
+                        if (currentTime - this.lastScore >= this.scoreDelay) {
+                            this.lastScore = currentTime;
+                            this.score++;
+                            score.textContent = this.score;
+                        }
+            
+                        this.update(dt);
+                        // this.refreshTiles(gameObjects);
+                        
+                        this.render();
+                    } else {
+                        this.sceneState = sceneStates.lose;
+                        this.loseTime = currentTime; 
+                        if (this.topScore < this.score) {
+                            this.topScore = this.score;
+                        }
+                        topScore.textContent = this.topScore;
                     }
-                    this.checkCollisions();
-                    if (currentTime - this.lastScore >= this.scoreDelay) {
-                        this.lastScore = currentTime;
-                        this.score++;
-                        score.textContent = this.score;
-                    }
-        
-                    this.update(dt);
-                    // this.refreshTiles(gameObjects);
-                    
-                    this.render();
                     break;
                 case "LOSE": 
-                    if (keyStates.space) {
-                        this.restart();
+                    if (currentTime - this.loseTime >= this.restartDelay && keyStates.space) {
+                        this.init();
                     }
                     break;
             }
@@ -164,9 +181,9 @@ export default class Scene {
         for (let obj of gameObjects) {
             if (obj.type === "OBSTACLE") {
                 if (
-                    this.player.rightBorder >= obj.posX && this.player.posX <= obj.rightBorder && this.player.bottomBorder >= obj.posY
+                    this.player.rightBorder >= obj.posX && this.player.posX <= obj.rightBorder && this.player.bottomBorder >= obj.posY && this.player.posY <= obj.bottomBorder
                 ) { 
-                    this.sceneState = sceneStates.lose;
+                    return true;
                 }
             }
         }
@@ -175,12 +192,5 @@ export default class Scene {
     clearObstacles() {
         const filteredObjects = gameObjects.filter(obj => obj.posX > -obj.tileWidth);
         gameObjects = [...filteredObjects];
-    }
-
-    restart() {
-        gameObjects = [];
-        this.init();
-        this.score = 0;
-        this.sceneState = sceneStates.pending;
     }
 }
