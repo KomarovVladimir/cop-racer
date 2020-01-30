@@ -176,7 +176,7 @@ export default class Scene {
                 image: gameMedia.bigObstacle,
                 speed: obstacleSpeed,
                 tileHeight: 32,
-                tileWidth: 64,
+                tileWidth: 90,
                 posX: 640,
                 posY: 168
             });
