@@ -8,7 +8,8 @@ const imageSources = [
     "./images/smallObstacle.png",
     "./images/mediumObstacle.png",
     "./images/bigObstacle.png",
-    "./images/background.png"
+    "./images/background.png",
+    "./images/road.png",
 ];
 
 export default class Game {

@@ -1,5 +1,6 @@
 import keyStates from "./keyStates";
 import gameMedia from "./gameMedia";
+import Object from "./Object";
 import Player from "./Player";
 import Obstacle from "./Obstacle";
 
@@ -13,7 +14,6 @@ const sceneStates = {
 
 const score = document.getElementById("score");
 const topScore = document.getElementById("top-score");
-
 
 export default class Scene {
     constructor(props) {
@@ -49,7 +49,7 @@ export default class Scene {
             tileHeight: 32,
             tileWidth: 48,
             posX: 32,
-            posY: 176
+            posY: 168
         });
     }
 
@@ -103,6 +103,7 @@ export default class Scene {
         gradient.addColorStop(1, "rgb(155, 60, 160, 160)");
         this.ctx.fillStyle = gradient;
         this.ctx.fillRect(0, 0, 640, 240);
+        this.ctx.drawImage(gameMedia.road, 0, 192);
     }
 
     frame() {
@@ -175,7 +176,16 @@ export default class Scene {
                 tileHeight: 32,
                 tileWidth: 64,
                 posX: 640,
-                posY: 176
+                posY: 168
+            });
+        } else if (random > 80) {
+            this.createObject(Obstacle, {
+                type: "OBSTACLE",
+                image: gameMedia.mediumObstacle,
+                tileHeight: 32,
+                tileWidth: 32,
+                posX: 640,
+                posY: 64
             });
         } else if (random > 75) {
             this.createObject(Obstacle, {
@@ -186,14 +196,14 @@ export default class Scene {
                 posX: 640,
                 posY: 128
             });
-        }  else if (random > 70) {
+        } else if (random > 70) {
             this.createObject(Obstacle, {
                 type: "OBSTACLE",
                 image: gameMedia.mediumObstacle,
                 tileHeight: 32,
                 tileWidth: 32,
                 posX: 640,
-                posY: 176
+                posY: 168
             });
         } else {
             this.createObject(Obstacle, {
@@ -202,7 +212,7 @@ export default class Scene {
                 tileHeight: 32,
                 tileWidth: 16,
                 posX: 640,
-                posY: 176
+                posY: 168
             });
         }
     }

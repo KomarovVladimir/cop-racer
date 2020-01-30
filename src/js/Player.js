@@ -19,8 +19,8 @@ export default class Player extends Object {
         } else if(this.jumped) {
             this.upForce -= this.downForce;
             this.posY -= this.upForce;
-            if (this.posY > 176) {
-                this.posY = 176;
+            if (this.posY > this.baseY) {
+                this.posY = this.baseY;
                 this.jumped = false;
             }
         }

@@ -11,6 +11,8 @@ export default class Object {
         this.currentTile = props.currentTile || 0;
         this.posX = props.posX || 0;
         this.posY = props.posY || 0;
+        this.baseX = this.posX;
+        this.baseY = this.posY;
         this.rightBorder = this.posX + this.tileWidth;
         this.bottomBorder = this.posY + this.tileHeight;
     }
