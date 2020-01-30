@@ -167,14 +167,44 @@ export default class Scene {
     }
 
     createObstacle() {
-        this.createObject(Obstacle, {
-            type: "OBSTACLE",
-            image: gameMedia.obstacle,
-            tileHeight: 32,
-            tileWidth: 16,
-            posX: 640,
-            posY: 176
-        });
+        const random = Math.random() * 100;
+        if (random > 90) {
+            this.createObject(Obstacle, {
+                type: "OBSTACLE",
+                image: gameMedia.bigObstacle,
+                tileHeight: 32,
+                tileWidth: 64,
+                posX: 640,
+                posY: 176
+            });
+        } else if (random > 75) {
+            this.createObject(Obstacle, {
+                type: "OBSTACLE",
+                image: gameMedia.mediumObstacle,
+                tileHeight: 32,
+                tileWidth: 32,
+                posX: 640,
+                posY: 128
+            });
+        }  else if (random > 70) {
+            this.createObject(Obstacle, {
+                type: "OBSTACLE",
+                image: gameMedia.mediumObstacle,
+                tileHeight: 32,
+                tileWidth: 32,
+                posX: 640,
+                posY: 176
+            });
+        } else {
+            this.createObject(Obstacle, {
+                type: "OBSTACLE",
+                image: gameMedia.smallObstacle,
+                tileHeight: 32,
+                tileWidth: 16,
+                posX: 640,
+                posY: 176
+            });
+        }
     }
 
     checkCollisions() {

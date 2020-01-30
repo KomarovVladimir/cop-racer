@@ -5,7 +5,9 @@ const mediaHandler = new MediaHandler();
 const imageSources = [
     "./images/player.png",
     "./images/road.png",
-    "./images/obstacle.png",
+    "./images/smallObstacle.png",
+    "./images/mediumObstacle.png",
+    "./images/bigObstacle.png",
     "./images/background.png"
 ];
 
