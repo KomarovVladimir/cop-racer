@@ -14,7 +14,7 @@ export default class Player extends Object {
 
         if(keyStates.space && !this.jumped) {
             this.jumped = true;
-            this.upForce = 16;
+            this.upForce = 14;
             this.posY -= this.upForce;
         } else if(this.jumped) {
             this.upForce -= this.downForce;
