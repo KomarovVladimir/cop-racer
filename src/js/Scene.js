@@ -3,8 +3,6 @@ import gameMedia from "./gameMedia";
 import Player from "./Player";
 import Obstacle from "./Obstacle";
 
-let gameObjects = [];
-
 const sceneStates = {
     on: "ON",
     lose: "LOSE",
@@ -19,6 +17,7 @@ const topScore = document.getElementById("top-score");
 export default class Scene {
     constructor(props) {
         this.ctx = props.ctx;
+        this.gameObjects = [];
         this.requestId = null;
         this.fps = 120;
         this.tps = 12;
@@ -41,14 +40,14 @@ export default class Scene {
     }
 
     init() {
-        gameObjects = [];
+        this.gameObjects = [];
         this.score = 0;
         this.sceneState = sceneStates.pending;
 
         this.player = this.createObject(Player, {
             image: gameMedia.player,
-            tileHeight: 32,
-            tileWidth: 48,
+            tileHeight: 27,
+            tileWidth: 43,
             posX: 32,
             posY: 168
         });
@@ -69,7 +68,7 @@ export default class Scene {
 
     update(dt) {
         // this.keyHandler(dt);
-        for (let obj of gameObjects) {
+        for (let obj of this.gameObjects) {
             if (obj.update) {
                 obj.update(dt);
             }
@@ -93,7 +92,7 @@ export default class Scene {
 
     render() {
         this.drawBackground();
-        for (let obj of gameObjects) {
+        for (let obj of this.gameObjects) {
             obj.draw(this.ctx);
         }
     }
@@ -138,7 +137,7 @@ export default class Scene {
                         }
             
                         this.update(dt);
-                        // this.refreshTiles(gameObjects);
+                        // this.refreshTiles(this.gameObjects);
                         
                         this.render();
                     } else {
@@ -164,7 +163,7 @@ export default class Scene {
 
     createObject(Class, props) {
         let obj = new Class(props);
-        gameObjects.push(obj);
+        this.gameObjects.push(obj);
         return obj;
     }
 
@@ -224,7 +223,7 @@ export default class Scene {
     }
 
     checkCollisions() {
-        for (let obj of gameObjects) {
+        for (let obj of this.gameObjects) {
             if (obj.type === "OBSTACLE") {
                 if (
                     this.player.rightBorder >= obj.posX &&
@@ -239,7 +238,7 @@ export default class Scene {
     }
 
     clearObstacles() {
-        const filteredObjects = gameObjects.filter(obj => obj.posX > -obj.tileWidth);
-        gameObjects = [...filteredObjects];
+        const filteredObjects = this.gameObjects.filter(obj => obj.posX > -obj.tileWidth);
+        this.gameObjects = [...filteredObjects];
     }
 }
