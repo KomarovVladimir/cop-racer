@@ -39,4 +39,12 @@ export default class Object {
         );
         ctx.restore();
     }
+
+    nextTile() {
+        if (this.currentTile < (this.tilesAmount - 1)) {
+            this.currentTile++;
+        } else {
+            this.currentTile = 0;
+        }
+    }
 }

@@ -46,10 +46,11 @@ export default class Scene {
 
         this.player = this.createObject(Player, {
             image: gameMedia.player,
-            tileHeight: 27,
-            tileWidth: 43,
+            tileHeight: 56,
+            tileWidth: 84,
+            tilesAmount: 3,
             posX: 32,
-            posY: 168
+            posY: 264
         });
     }
 
@@ -67,7 +68,6 @@ export default class Scene {
     }
 
     update(dt) {
-        // this.keyHandler(dt);
         for (let obj of this.gameObjects) {
             if (obj.update) {
                 obj.update(dt);
@@ -102,8 +102,8 @@ export default class Scene {
         gradient.addColorStop(0, "rgb(125, 100, 190)");
         gradient.addColorStop(1, "rgb(155, 60, 160, 160)");
         this.ctx.fillStyle = gradient;
-        this.ctx.fillRect(0, 0, 640, 240);
-        this.ctx.drawImage(gameMedia.road, 0, 192);
+        this.ctx.fillRect(0, 0, 640, 480);
+        this.ctx.drawImage(gameMedia.road, 0, 312);
     }
 
     frame() {
@@ -137,7 +137,7 @@ export default class Scene {
                         }
             
                         this.update(dt);
-                        // this.refreshTiles(this.gameObjects);
+                        this.refreshTiles(this.gameObjects);
                         
                         this.render();
                     } else {

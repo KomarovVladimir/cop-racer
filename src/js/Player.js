@@ -16,12 +16,14 @@ export default class Player extends Object {
             this.jumped = true;
             this.upForce = 14;
             this.posY -= this.upForce;
+            this.currentTileRow = 1;
         } else if(this.jumped) {
             this.upForce -= this.downForce;
             this.posY -= this.upForce;
             if (this.posY > this.baseY) {
                 this.posY = this.baseY;
                 this.jumped = false;
+                this.currentTileRow = 0;
             }
         }
     }
