@@ -212,12 +212,12 @@ export default class Scene {
         } else {
             this.createObject(Obstacle, {
                 type: "OBSTACLE",
-                image: gameMedia.smallObstacle,
+                image: gameMedia.bin,
                 speed: obstacleSpeed,
-                tileHeight: 44,
-                tileWidth: 28,
+                tileHeight: 42,
+                tileWidth: 30,
                 posX: 640,
-                posY: 156
+                posY: 278
             });
         }
     }

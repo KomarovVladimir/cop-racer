@@ -9,6 +9,7 @@ const imageSources = [
     "./images/mediumObstacle.png",
     "./images/bigObstacle.png",
     "./images/road.png",
+    "./images/bin.png",
 ];
 
 export default class Game {
