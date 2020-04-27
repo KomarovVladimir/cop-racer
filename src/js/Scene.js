@@ -9,8 +9,6 @@ const sceneStates = {
     pending: "PENDING"
 }
 
-const obstacleSpeed = 12;
-
 const score = document.getElementById("score");
 const topScore = document.getElementById("top-score");
 
@@ -27,13 +25,14 @@ export default class Scene {
         this.tileDelay =  Math.floor(1000 / this.tps);
         this.sceneStartTime = null;
         this.sceneState = sceneStates.pending;
-        this.score = 0;
-        this.scoreDelay = 60;
-        this.lastScore = null;
+        this.obstacleSpeed = 12;
         this.obstacleDelay = 800;
         this.lastObstacle = 0;
         this.loseTime = null;
         this.restartDelay = 1000;
+        this.score = 0;
+        this.scoreDelay = 60;
+        this.lastScore = null;
         this.topScore = 0;
 
         this.frame = this.frame.bind(this);
@@ -43,6 +42,7 @@ export default class Scene {
         this.gameObjects = [];
         this.score = 0;
         this.sceneState = sceneStates.pending;
+        this.obstacleSpeed = 12;
 
         this.player = this.createObject(Player, {
             image: gameMedia.player,
@@ -67,12 +67,32 @@ export default class Scene {
         this.requestId = requestAnimationFrame(this.frame);
     }
 
-    update(dt) {
+    update(currentTime, dt) {
+        if ( currentTime - this.lastObstacle >= this.obstacleDelay) {
+            this.lastObstacle = currentTime;
+            this.obstacleDelay = 600 + Math.floor(Math.random() * 400 + 200);
+            this.createObstacle();
+            this.clearObstacles();
+        }
+        if (currentTime - this.lastScore >= this.scoreDelay) {
+            this.lastScore = currentTime;
+            this.score++;
+            score.textContent = this.score;
+        }
+
         for (let obj of this.gameObjects) {
             if (obj.update) {
                 obj.update(dt);
             }
         }
+
+        if (this.score > 1400) {
+            this.obstacleSpeed = 15;
+        } else if (this.score > 700) {
+            this.obstacleSpeed = 14; 
+        }
+
+        this.refreshTiles(this.gameObjects);
     }
 
     refreshTiles(objects) {
@@ -124,21 +144,7 @@ export default class Scene {
                     break;
                 case "ON":
                     if (!this.checkCollisions()) {
-                        if ( currentTime - this.lastObstacle >= this.obstacleDelay) {
-                            this.lastObstacle = currentTime;
-                            this.obstacleDelay = 600 + Math.floor(Math.random() * 400 + 200);
-                            this.createObstacle();
-                            this.clearObstacles();
-                        }
-                        if (currentTime - this.lastScore >= this.scoreDelay) {
-                            this.lastScore = currentTime;
-                            this.score++;
-                            score.textContent = this.score;
-                        }
-            
-                        this.update(dt);
-                        this.refreshTiles(this.gameObjects);
-                        
+                        this.update(currentTime, dt);
                         this.render();
                     } else {
                         this.sceneState = sceneStates.lose;
@@ -173,7 +179,7 @@ export default class Scene {
             this.createObject(Obstacle, {
                 type: "OBSTACLE",
                 image: gameMedia.bigObstacle,
-                speed: obstacleSpeed,
+                speed: this.obstacleSpeed,
                 tileHeight: 32,
                 tileWidth: 90,
                 posX: 640,
@@ -183,7 +189,7 @@ export default class Scene {
             this.createObject(Obstacle, {
                 type: "OBSTACLE",
                 image: gameMedia.mediumObstacle,
-                speed: obstacleSpeed,
+                speed: this.obstacleSpeed,
                 tileHeight: 32,
                 tileWidth: 32,
                 posX: 640,
@@ -193,7 +199,7 @@ export default class Scene {
             this.createObject(Obstacle, {
                 type: "OBSTACLE",
                 image: gameMedia.mediumObstacle,
-                speed: obstacleSpeed,
+                speed: this.obstacleSpeed,
                 tileHeight: 32,
                 tileWidth: 32,
                 posX: 640,
@@ -203,7 +209,7 @@ export default class Scene {
             this.createObject(Obstacle, {
                 type: "OBSTACLE",
                 image: gameMedia.mediumObstacle,
-                speed: obstacleSpeed,
+                speed: this.obstacleSpeed,
                 tileHeight: 32,
                 tileWidth: 32,
                 posX: 640,
@@ -213,7 +219,7 @@ export default class Scene {
             this.createObject(Obstacle, {
                 type: "OBSTACLE",
                 image: gameMedia.bin,
-                speed: obstacleSpeed,
+                speed: this.obstacleSpeed,
                 tileHeight: 42,
                 tileWidth: 30,
                 posX: 640,
@@ -223,13 +229,14 @@ export default class Scene {
     }
 
     checkCollisions() {
+        //magic numbers are coming!
         for (let obj of this.gameObjects) {
             if (obj.type === "OBSTACLE") {
                 if (
                     this.player.rightBorder >= obj.posX &&
                     this.player.posX + 12 <= obj.rightBorder && 
-                    this.player.bottomBorder - this.player.upForce >= obj.posY && 
-                    this.player.posY <= obj.bottomBorder
+                    this.player.bottomBorder - 6 - this.player.upForce >= obj.posY && 
+                    this.player.posY + 6 <= obj.bottomBorder
                 ) { 
                     return true;
                 }
