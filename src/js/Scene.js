@@ -2,7 +2,7 @@ import keyStates from "./keyStates";
 import gameMedia from "./gameMedia";
 import Player from "./Player";
 import Obstacle from "./Obstacle";
-import PatternObject from "./PatternObject";
+import DinamicBackground from "./DinamicBackground";
 
 const sceneStates = {
     on: "ON",
@@ -54,15 +54,14 @@ export default class Scene {
             posY: 264
         });
 
-        this.road = this.createObject(PatternObject, {
-            image: gameMedia.roadPattern,
+        this.road = new DinamicBackground({
+            image: gameMedia.road,
             tileHeight: 48,
-            tileWidth: 48,
-            tilesAmount: 11,
-            patternWidth: 640,
-            patternHeight: 48,
+            tileWidth: 768,
+            offset: 128,
             posX: 0,
-            posY: 312
+            posY: 312,
+            speed: this.obstacleSpeed
         });
     }
 
@@ -98,6 +97,8 @@ export default class Scene {
             }
         }
 
+        this.road.update(dt);
+
         if (this.score > 1400) {
             this.obstacleSpeed = 15;
         } else if (this.score > 700) {
@@ -124,6 +125,7 @@ export default class Scene {
 
     render() {
         this.drawBackground();
+        this.road.draw(this.ctx);
         for (let obj of this.gameObjects) {
             obj.draw(this.ctx);
         }
@@ -135,9 +137,6 @@ export default class Scene {
         gradient.addColorStop(1, "rgb(155, 60, 160, 160)");
         this.ctx.fillStyle = gradient;
         this.ctx.fillRect(0, 0, 640, 480);
-
-
-        // this.ctx.drawImage(gameMedia.road, 0, 312);
     }
 
     frame() {
