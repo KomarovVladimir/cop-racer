@@ -2,6 +2,7 @@ import keyStates from "./keyStates";
 import gameMedia from "./gameMedia";
 import Player from "./Player";
 import Obstacle from "./Obstacle";
+import PatternObject from "./PatternObject";
 
 const sceneStates = {
     on: "ON",
@@ -51,6 +52,17 @@ export default class Scene {
             tilesAmount: 3,
             posX: 32,
             posY: 264
+        });
+
+        this.road = this.createObject(PatternObject, {
+            image: gameMedia.roadPattern,
+            tileHeight: 48,
+            tileWidth: 48,
+            tilesAmount: 11,
+            patternWidth: 640,
+            patternHeight: 48,
+            posX: 0,
+            posY: 312
         });
     }
 
@@ -123,7 +135,9 @@ export default class Scene {
         gradient.addColorStop(1, "rgb(155, 60, 160, 160)");
         this.ctx.fillStyle = gradient;
         this.ctx.fillRect(0, 0, 640, 480);
-        this.ctx.drawImage(gameMedia.road, 0, 312);
+
+
+        // this.ctx.drawImage(gameMedia.road, 0, 312);
     }
 
     frame() {
