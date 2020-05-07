@@ -64,6 +64,26 @@ export const mediumObstacleProps = {
     posY: 64
 }
 
+export const flyingObstacle1Props = {
+    type: "OBSTACLE",
+    image: gameMedia.mediumObstacle,
+    speed: obstacleSpeed,
+    tileHeight: 32,
+    tileWidth: 32,
+    posX: 640,
+    posY: 128
+}
+
+export const flyingObstacle2Props = {
+    type: "OBSTACLE",
+    image: gameMedia.mediumObstacle,
+    speed: obstacleSpeed,
+    tileHeight: 32,
+    tileWidth: 32,
+    posX: 640,
+    posY: 168
+}
+
 export const obstacleProps = {
     type: "OBSTACLE",
     image: gameMedia.bin,

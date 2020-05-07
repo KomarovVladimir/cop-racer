@@ -3,8 +3,8 @@ import gameMedia from "./gameMedia";
 import Player from "./Player";
 import Obstacle from "./Obstacle";
 import DinamicBackground from "./DinamicBackground";
-import { playerProps } from "./variables";
 
+let vars;
 
 const sceneStates = {
     on: "ON",
@@ -41,32 +41,17 @@ export default class Scene {
         this.frame = this.frame.bind(this);
     }
 
-    init() {
+    async init() {
+        vars = await import("./variables");
+
         this.gameObjects = [];
         this.score = 0;
         this.sceneState = sceneStates.pending;
         // this.obstacleSpeed = 12;
 
-        this.player = this.createObject(Player, {
-            image: gameMedia.player,
-            tileHeight: 56,
-            tileWidth: 84,
-            tilesAmount: 3,
-            posX: 32,
-            posY: 264
-        });
+        this.player = this.createObject(Player, vars.playerProps);
 
-        console.log(playerProps)
-
-        this.road = new DinamicBackground({
-            image: gameMedia.road,
-            tileHeight: 48,
-            tileWidth: 768,
-            offset: 128,
-            posX: 0,
-            posY: 312,
-            speed: this.obstacleSpeed
-        });
+        this.road = new DinamicBackground(vars.roadProps);
     }
 
     async start() {
@@ -193,55 +178,15 @@ export default class Scene {
     createObstacle() {
         const random = Math.random() * 100;
         if (random > 90) {
-            this.createObject(Obstacle, {
-                type: "OBSTACLE",
-                image: gameMedia.bigObstacle,
-                speed: this.obstacleSpeed,
-                tileHeight: 32,
-                tileWidth: 90,
-                posX: 640,
-                posY: 168
-            });
+            this.createObject(Obstacle, vars.bigObstacleProps);
         } else if (random > 80) {
-            this.createObject(Obstacle, {
-                type: "OBSTACLE",
-                image: gameMedia.mediumObstacle,
-                speed: this.obstacleSpeed,
-                tileHeight: 32,
-                tileWidth: 32,
-                posX: 640,
-                posY: 64
-            });
+            this.createObject(Obstacle, vars.mediumObstacleProps);
         } else if (random > 75) {
-            this.createObject(Obstacle, {
-                type: "OBSTACLE",
-                image: gameMedia.mediumObstacle,
-                speed: this.obstacleSpeed,
-                tileHeight: 32,
-                tileWidth: 32,
-                posX: 640,
-                posY: 128
-            });
+            this.createObject(Obstacle, vars.flyingObstacle1Props);
         } else if (random > 70) {
-            this.createObject(Obstacle, {
-                type: "OBSTACLE",
-                image: gameMedia.mediumObstacle,
-                speed: this.obstacleSpeed,
-                tileHeight: 32,
-                tileWidth: 32,
-                posX: 640,
-                posY: 168
-            });
+            this.createObject(Obstacle, vars.flyingObstacle2Props);
         } else {
-            this.createObject(Obstacle, {
-                type: "OBSTACLE",
-                image: gameMedia.bin,
-                speed: this.obstacleSpeed,
-                tileHeight: 42,
-                tileWidth: 30,
-                posX: 640,
-                posY: 278
-            });
+            this.createObject(Obstacle, vars.obstacleProps);
         }
     }
 
