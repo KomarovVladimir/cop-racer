@@ -3,6 +3,8 @@ import gameMedia from "./gameMedia";
 import Player from "./Player";
 import Obstacle from "./Obstacle";
 import DinamicBackground from "./DinamicBackground";
+import { playerProps } from "./variables";
+
 
 const sceneStates = {
     on: "ON",
@@ -43,7 +45,7 @@ export default class Scene {
         this.gameObjects = [];
         this.score = 0;
         this.sceneState = sceneStates.pending;
-        this.obstacleSpeed = 12;
+        // this.obstacleSpeed = 12;
 
         this.player = this.createObject(Player, {
             image: gameMedia.player,
@@ -53,6 +55,8 @@ export default class Scene {
             posX: 32,
             posY: 264
         });
+
+        console.log(playerProps)
 
         this.road = new DinamicBackground({
             image: gameMedia.road,

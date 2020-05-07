@@ -32,14 +32,3 @@ export default class Game {
         this.scene.start();
     }  
 }
-
-// const imageSources = [
-//     "../images/player.png",
-//     "../images/road.png",
-//     "../images/punk.png",
-//     "../images/trash.png",
-//     "../images/hooker.png",
-//     "../images/background.png",
-//     "../images/hologram.png",
-//     "../images/cloud.png",
-// ];
