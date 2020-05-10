@@ -30,13 +30,9 @@ export default class Scene {
         this.sceneStartTime = null;
         this.sceneState = sceneStates.pending;
         this.obstacleSpeed = 12;
-        // this.obstacleDelay = 800;
-        // this.lastObstacle = 0;
         this.loseTime = null;
         this.restartDelay = 1000;
         this.score = 0;
-        this.scoreDelay = 60;
-        this.lastScore = null;
         this.topScore = 0;
 
         this.tickers = [];
@@ -59,7 +55,12 @@ export default class Scene {
         this.tickers.push(new Ticker(800, () => {
             this.createObstacle();
             this.clearObstacles();
-        }, null, 4000));
+        }, null, 2000));
+
+        this.tickers.push(new Ticker(60, () => {
+            this.score++;
+            score.textContent = this.score;
+        }, null, 2000));
     }
 
     async start() {
@@ -75,32 +76,18 @@ export default class Scene {
         this.requestId = requestAnimationFrame(this.frame);
     }
 
-    update(currentTime, dt) {
-        // if ( currentTime - this.lastObstacle >= this.obstacleDelay) {
-        //     this.lastObstacle = currentTime;
-        //     this.obstacleDelay = 600 + Math.floor(Math.random() * 400 + 200);
-        //     this.createObstacle();
-        //     this.clearObstacles();
-        // }
-        
-        if (currentTime - this.lastScore >= this.scoreDelay) {
-            this.lastScore = currentTime;
-            this.score++;
-            score.textContent = this.score;
-        }
-
+    update() {   
         for (let obj of this.gameObjects) {
             if (obj.update) {
-                obj.update(dt);
+                obj.update();
             }
         }
 
-        // console.log(this.tickers)
         for (let ticker of this.tickers) {
             ticker.update();
         }
 
-        this.road.update(dt);
+        this.road.update();
 
         if (this.score > 1400) {
             this.obstacleSpeed = 15;
@@ -160,7 +147,7 @@ export default class Scene {
                     break;
                 case "ON":
                     if (!this.checkCollisions()) {
-                        this.update(currentTime, dt);
+                        this.update();
                         this.render();
                     } else {
                         this.sceneState = sceneStates.lose;
