@@ -34,8 +34,6 @@ export default class Scene {
         this.restartDelay = 1000;
         this.score = 0;
         this.topScore = 0;
-        // this.scoreDelay = 60;
-        // this.lastScore = null;
 
         this.tickers = [];
 
@@ -57,7 +55,12 @@ export default class Scene {
 
         this.tickers.push(new Ticker(800, () => {
             this.createObstacle();
-            this.clearObstacles();
+            this.deleteOffscreenObjects();
+        }, null, 4000));
+
+        this.tickers.push(new Ticker(800, () => {
+            this.createObstacle();
+            this.deleteOffscreenObjects();
         }, null, 4000));
 
         this.tickers.push(new Ticker(60, () => {
@@ -222,7 +225,7 @@ export default class Scene {
         }
     }
 
-    clearObstacles() {
+    deleteOffscreenObjects() {
         const filteredObjects = this.gameObjects.filter(obj => obj.posX > -obj.tileWidth);
         this.gameObjects = [...filteredObjects];
     }
