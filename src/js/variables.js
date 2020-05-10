@@ -38,7 +38,7 @@ export const roadProps = {
     image: gameMedia.road,
     tileHeight: 48,
     tileWidth: 768,
-    offset: 128,
+    offset: 64,
     posX: 0,
     posY: 312,
     speed: obstacleSpeed

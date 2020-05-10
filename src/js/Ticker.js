@@ -11,6 +11,12 @@ class Ticker {
         
     }
 
+    init() {
+        this.startTime = performance.now();
+        this.currentTime = this.startTime;
+        this.lastTime = this.currentTime;
+    }
+
     update() {
         this.currentTime = performance.now();
         if (this.currentTime >= this.startTime + this.delayBeforeStart) {

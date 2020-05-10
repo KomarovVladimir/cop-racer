@@ -34,8 +34,12 @@ export default class Scene {
         this.restartDelay = 1000;
         this.score = 0;
         this.topScore = 0;
+        // this.scoreDelay = 60;
+        // this.lastScore = null;
 
         this.tickers = [];
+
+        
 
         this.frame = this.frame.bind(this);
     }
@@ -46,7 +50,6 @@ export default class Scene {
         this.gameObjects = [];
         this.score = 0;
         this.sceneState = sceneStates.pending;
-        // this.obstacleSpeed = 12;
 
         this.player = this.createObject(Player, vars.playerProps);
 
@@ -55,12 +58,24 @@ export default class Scene {
         this.tickers.push(new Ticker(800, () => {
             this.createObstacle();
             this.clearObstacles();
-        }, null, 2000));
+        }, null, 4000));
 
         this.tickers.push(new Ticker(60, () => {
             this.score++;
             score.textContent = this.score;
-        }, null, 2000));
+        }, null, 4000));
+    }
+
+    restart() {
+        this.score = 0;
+        score.textContent = 0;
+        this.deleteObjects();
+        this.player = this.createObject(Player, vars.playerProps);
+        this.obstacleSpeed = 12;
+        this.sceneState = sceneStates.on;
+        for (let ticker of this.tickers) {
+            ticker.init();
+        }
     }
 
     async start() {
@@ -76,7 +91,7 @@ export default class Scene {
         this.requestId = requestAnimationFrame(this.frame);
     }
 
-    update() {   
+    update() {
         for (let obj of this.gameObjects) {
             if (obj.update) {
                 obj.update();
@@ -160,7 +175,7 @@ export default class Scene {
                     break;
                 case "LOSE": 
                     if (currentTime - this.loseTime >= this.restartDelay && keyStates.space) {
-                        this.init();
+                        this.restart();
                     }
                     break;
             }
@@ -210,5 +225,9 @@ export default class Scene {
     clearObstacles() {
         const filteredObjects = this.gameObjects.filter(obj => obj.posX > -obj.tileWidth);
         this.gameObjects = [...filteredObjects];
+    }
+
+    deleteObjects() {
+        this.gameObjects = [];
     }
 }
