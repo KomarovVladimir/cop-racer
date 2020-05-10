@@ -3,6 +3,7 @@ import gameMedia from "./gameMedia";
 import Player from "./Player";
 import Obstacle from "./Obstacle";
 import DinamicBackground from "./DinamicBackground";
+import Ticker from "./Ticker";
 
 let vars;
 
@@ -29,14 +30,16 @@ export default class Scene {
         this.sceneStartTime = null;
         this.sceneState = sceneStates.pending;
         this.obstacleSpeed = 12;
-        this.obstacleDelay = 800;
-        this.lastObstacle = 0;
+        // this.obstacleDelay = 800;
+        // this.lastObstacle = 0;
         this.loseTime = null;
         this.restartDelay = 1000;
         this.score = 0;
         this.scoreDelay = 60;
         this.lastScore = null;
         this.topScore = 0;
+
+        this.tickers = [];
 
         this.frame = this.frame.bind(this);
     }
@@ -52,6 +55,11 @@ export default class Scene {
         this.player = this.createObject(Player, vars.playerProps);
 
         this.road = new DinamicBackground(vars.roadProps);
+
+        this.tickers.push(new Ticker(800, () => {
+            this.createObstacle();
+            this.clearObstacles();
+        }, null, 4000));
     }
 
     async start() {
@@ -68,12 +76,13 @@ export default class Scene {
     }
 
     update(currentTime, dt) {
-        if ( currentTime - this.lastObstacle >= this.obstacleDelay) {
-            this.lastObstacle = currentTime;
-            this.obstacleDelay = 600 + Math.floor(Math.random() * 400 + 200);
-            this.createObstacle();
-            this.clearObstacles();
-        }
+        // if ( currentTime - this.lastObstacle >= this.obstacleDelay) {
+        //     this.lastObstacle = currentTime;
+        //     this.obstacleDelay = 600 + Math.floor(Math.random() * 400 + 200);
+        //     this.createObstacle();
+        //     this.clearObstacles();
+        // }
+        
         if (currentTime - this.lastScore >= this.scoreDelay) {
             this.lastScore = currentTime;
             this.score++;
@@ -84,6 +93,11 @@ export default class Scene {
             if (obj.update) {
                 obj.update(dt);
             }
+        }
+
+        // console.log(this.tickers)
+        for (let ticker of this.tickers) {
+            ticker.update();
         }
 
         this.road.update(dt);

@@ -1,17 +1,23 @@
 
 class Ticker {
     constructor(delay, callback, props, delayBeforeStart) {
-        this.currentTime = performance.now();
-        this.lastTime = currentTime;
+        this.startTime = performance.now();
+        this.currentTime = this.startTime;
+        this.lastTime = this.currentTime;
         this.delay = delay;
         this.delayBeforeStart = delayBeforeStart || 0;
         this.callback = callback;
+        this.props = props;
+        
     }
 
     update() {
-        if (currentTime - this.lastTime >= this.delay) {
-            this.lastTime = currentTime;
-            callback(props);
+        this.currentTime = performance.now();
+        if (this.currentTime >= this.startTime + this.delayBeforeStart) {
+            if (this.currentTime - this.lastTime >= this.delay) {
+                this.lastTime = this.currentTime;
+                this.callback(this.props);
+            }
         }
     }
 }
